@@ -12,15 +12,28 @@ statsd_namespace = ENV.fetch('STATSD_NAMESPACE', 'router')
 
 
 interval = ENV.fetch('INTERVAL', '1').to_f
-device_refresh_interval = ENV.fetch('DEVICE_REFRESH_INTERVAL', 60).to_i
+hostname_refresh_interval = ENV.fetch('HOSTNAME_REFRESH_INTERVAL', 60).to_i
 
 statsd = Datadog::Statsd.new(statsd_host, statsd_port)
 statsd.namespace = statsd_namespace
 api = Tomato::API.new(router, user: user, pass: pass, session_id: session_id)
 
+get_ip_to_host = -> {
+  Hash[api.devices.values.map do |device|
+    [device.ip, (device.name && device.name.length > 0) ? device.name : nil]
+  end]
+}
+
+next_refresh = Time.at(0)
 last = api.iptraffic
+ip_to_host = {}
 
 loop do
+  if Time.now > next_refresh
+    ip_to_host = get_ip_to_host.call
+    next_refresh = Time.now + hostname_refresh_interval
+  end
+
   time = Time.now
   begin
     now = api.iptraffic
@@ -38,7 +51,7 @@ loop do
     end]
 
     output.each do |ip, values|
-      tags = ["ip:#{ip}"]
+      tags = ["ip:#{ip}", "hostname:#{ip_to_host[ip] || ip}"]
       statsd.batch do |s|
         values.each do |key, value|
           case key

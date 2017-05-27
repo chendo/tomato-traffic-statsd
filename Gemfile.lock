@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/chendo/tomato-api
-  revision: c0dd6f52441917dd5055f7c1835c5428e6223458
+  revision: 8511ef47a2ebb0edeb4711dbddc22947e3ea058b
   specs:
     tomato-api (0.1.0)
       json
