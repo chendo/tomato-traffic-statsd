@@ -44,7 +44,7 @@ loop do
         when :tcpconn, :udpconn
           [key, now_value]
         else
-          [key, now_value - last.fetch(ip, {}).fetch(key, 0)]
+          [key, [0, now_value - last.fetch(ip, {}).fetch(key, 0)].max]
         end
       end
       [ip, Hash[deltas]]
