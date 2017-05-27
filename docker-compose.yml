@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  bw-mon:
+    build: https://github.com/chendo/tomato-traffic-statsd.git
+    environment:
+      - STATSD_HOST
+      - STATSD_PORT
+      - STATSD_NAMESPACE
+      - TOMATO_HOST
+      - TOMATO_USER
+      - TOMATO_PASS
+      - TOMATO_SESSION_ID
