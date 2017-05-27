@@ -1,0 +1,22 @@
+GIT
+  remote: https://github.com/chendo/tomato-api
+  revision: c0dd6f52441917dd5055f7c1835c5428e6223458
+  specs:
+    tomato-api (0.1.0)
+      json
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    dogstatsd-ruby (3.0.0)
+    json (2.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  dogstatsd-ruby
+  tomato-api!
+
+BUNDLED WITH
+   1.13.7
